@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./chroma_storage:/app/chroma_storage
+    environment:
+      - CHROMA_PERSIST_DIR=/app/chroma_storage
+      - EMBEDDING_MODEL=paraphrase-multilingual-MiniLM-L12-v2
+      - COLLECTION_NAME=rafiq_ai
+      - TOP_K=5
+      - HF_MODEL=${HF_MODEL}
+      - HF_TOKEN=${HF_TOKEN}
+      - OLLAMA_URL=${OLLAMA_URL}
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+# Optional: if you run Ollama as a service inside Docker you'd add it here (not included by default)
